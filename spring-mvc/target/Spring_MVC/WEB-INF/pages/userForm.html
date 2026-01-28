@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${user.id} != null ? 'Edit User' : 'Add User'">Add User</title>
+</head>
+<body>
+<h1 th:text="${user.id} != null ? 'Edit User' : 'Add User'">Add User</h1>
+
+<form method="post">
+    <input type="hidden" name="id" th:if="${user.id} != null" th:value="${user.id}">
+
+    <label>First Name:
+        <input type="text" name="firstName" th:value="${user.firstName}">
+    </label><br><br>
+
+    <label>Last Name:
+        <input type="text" name="lastName" th:value="${user.lastName}">
+    </label><br><br>
+
+    <label>Email:
+        <input type="email" name="email" th:value="${user.email}">
+    </label><br><br>
+
+    <button type="submit" th:text="${user.id} != null ? 'Update' : 'Add'">Add</button>
+</form>
+
+<br>
+<a href="/users">Back to List</a>
+</body>
+</html>
