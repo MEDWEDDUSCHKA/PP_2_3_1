@@ -39,8 +39,7 @@ public class UserDaoImp implements UserDao {
 
     @Override
     public List<User> findAllUsers() {
-        TypedQuery <User> query = entityManager.createQuery(
-                QUERY_FIND_ALL_USERS, User.class);
+        TypedQuery <User> query = entityManager.createQuery(QUERY_FIND_ALL_USERS, User.class);
         return query.getResultList();
     }
 

@@ -12,9 +12,8 @@ import java.util.List;
 @Service
 public class UserServiceImp implements UserService {
 
-    private UserDao userDao;
+    private final UserDao userDao;
 
-    @Autowired
     public UserServiceImp(UserDao userDao) {
         this.userDao = userDao;
     }
@@ -27,8 +26,29 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Transactional
-    public void updateUser(User user) {
-        userDao.updateUser(user);
+    public void updateUser(Long id, String firstName, String lastName, String email) {
+        User existingUser = userDao.findUserById(id);
+        if (existingUser != null) {
+            existingUser.setFirstName(firstName);
+            existingUser.setLastName(lastName);
+            existingUser.setEmail(email);
+            userDao.updateUser(existingUser);
+        }
+    }
+
+    @Override
+    @Transactional
+    public void updateUserFromEdit(Long id, String firstName, String lastName, String email) {
+        User existingUser = userDao.findUserById(id);
+        if (existingUser == null) {
+            User newUser = new User(firstName, lastName, email);
+            userDao.saveUser(newUser);
+        } else {
+            existingUser.setFirstName(firstName);
+            existingUser.setLastName(lastName);
+            existingUser.setEmail(email);
+            userDao.updateUser(existingUser);
+        }
     }
 
     @Override

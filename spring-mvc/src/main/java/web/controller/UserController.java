@@ -21,9 +21,8 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -36,17 +35,14 @@ public class UserController {
     }
 
     @GetMapping("/new")
-    public String newUsersForm (Model model) {
+    public String addNewUsersForm (Model model) {
         model.addAttribute("user", new User());
         return "userForm";
     }
 
     @PostMapping("/new")
-    public String saveUser(
-            @RequestParam("firstName") String firstname,
-            @RequestParam("lastName") String lastname,
-            @RequestParam("email") String email) {
-        User user = new User(firstname, lastname, email);
+    public String saveUser(@RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("email") String email) {
+        User user = new User(firstName, lastName, email);
         userService.saveUser(user);
         return "redirect:/users";
     }
@@ -59,34 +55,14 @@ public class UserController {
     }
 
     @PostMapping("/edit")
-    public String updateUserFromEdit(
-            @RequestParam("id") Long id,
-            @RequestParam("firstName") String firstname,
-            @RequestParam("lastName") String lastname,
-            @RequestParam("email") String email){
-        User existingUser = userService.findUserById(id);
-        if(existingUser != null){
-            existingUser.setFirstName(firstname);
-            existingUser.setLastName(lastname);
-            existingUser.setEmail(email);
-            userService.updateUser(existingUser);
-        }
+    public String updateUserFromEdit(@RequestParam("id") Long id, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("email") String email){
+        userService.updateUserFromEdit(id, firstName, lastName, email);
         return "redirect:/users";
     }
 
     @PostMapping("/update")
-    public String updateUser(
-            @RequestParam("id") Long id,
-            @RequestParam("firstName") String firstname,
-            @RequestParam("lastName") String lastname,
-            @RequestParam("email") String email) {
-       User existingUser = userService.findUserById(id);
-       if (existingUser == null) {
-           existingUser.setFirstName(firstname);
-           existingUser.setLastName(lastname);
-           existingUser.setEmail(email);
-           userService.saveUser(existingUser);
-       }
+    public String updateUser(@RequestParam("id") Long id, @RequestParam("firstName") String firstName, @RequestParam("lastName") String lastName, @RequestParam("email") String email) {
+        userService.updateUser(id, firstName, lastName, email);
         return "redirect:/users";
     }
 
